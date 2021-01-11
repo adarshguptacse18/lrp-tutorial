@@ -1,8 +1,4 @@
 
-<center>
-<img src="banner-small.png">
-</center>
-<br>
 <h1 align='center'>Tutorial: Implementing Layer-Wise Relevance Propagation</h1>
 <br>
 <p><em>
@@ -61,7 +57,7 @@ and some additional functions (in the file <code>utils.py</code>).
     utils.digit(X.reshape(1,12,28,28).transpose(0,2,1,3).reshape(28,12*28),9,0.75)
 
 
-![png](index_files/index_2_0.png)
+![png](tutorial_files/tutorial_2_0.png)
 
 
 Each digit is stored as a 784-dimensional vector of pixel values, where "-1.0"
@@ -107,21 +103,21 @@ output:
         print("  ".join(['[%1d] %.1f'%(d,p[d]) for d in range(10)]))
 
 
-![png](index_files/index_8_0.png)
+![png](tutorial_files/tutorial_8_0.png)
 
 
     [0] 0.0  [1] 3.6  [2] 49.1  [3] 8.9  [4] 0.0  [5] 0.0  [6] 0.0  [7] 1.4  [8] 1.6  [9] 0.0
 
 
 
-![png](index_files/index_8_2.png)
+![png](tutorial_files/tutorial_8_2.png)
 
 
     [0] 0.0  [1] 27.0  [2] 0.0  [3] 0.0  [4] 5.3  [5] 0.0  [6] 0.0  [7] 13.0  [8] 8.1  [9] 2.3
 
 
 
-![png](index_files/index_8_4.png)
+![png](tutorial_files/tutorial_8_4.png)
 
 
     [0] 49.1  [1] 0.0  [2] 10.6  [3] 0.0  [4] 0.0  [5] 0.2  [6] 0.0  [7] 3.0  [8] 0.0  [9] 9.2
@@ -145,11 +141,8 @@ only the evidence for the actual class.</p>
 href="">LRP overview paper</a> (Section 10.2.1) for propagating relevance on the
 lower layers are special cases of the more general propagation rule</p>
 
-<p>
-$$
-R_j = \sum_k \frac{a_j \rho(w_{jk})}{\epsilon + \sum_{0,j} a_j \rho(w_{jk})} R_k
-$$
-</p>
+<img src="http://latex.codecogs.com/svg.latex?R_j = \sum_k \frac{a_j
+\rho(w_{jk})}{\epsilon + \sum_{0,j} a_j \rho(w_{jk})} R_k">
 
 <p>(cf. Section 10.2.2), where $\rho$ is a function that transform the weights,
 and $\epsilon$ is a small positive increment. We define below two helper
@@ -170,14 +163,15 @@ of this general rule. It can be decomposed as a sequence of four
 computations:</p>
 
 <p>
+<img src="http://latex.codecogs.com/svg.latex?
 \begin{align*}
-\forall_k:&~z_k = {\textstyle \epsilon + \sum_{0,j}} a_j \rho(w_{jk}) &
+\forall_k:~z_k = {\textstyle \epsilon + \sum_{0,j}} a_j \rho(w_{jk}) &
 (\text{step }1)\\
-\forall_k:&~s_k = R_k / z_k \qquad & (\text{step }2)\\
-\forall_j:&~c_j = {\textstyle \sum_k} \rho(w_{jk}) s_k \qquad & (\text{step
-}3)\\
-\forall_j:&~R_j = a_j \cdot c_j \qquad & (\text{step }4)
+\forall_k:~s_k = R_k / z_k \qquad & (\text{step }2)\\
+\forall_j:~c_j = {\textstyle \sum_k} \rho(w_{jk}) s_k \qquad & (\text{step }3)\\
+\forall_j:~R_j = a_j \cdot c_j \qquad & (\text{step }4)
 \end{align*}
+">
 </p>
 
 <p>The layer-wise relevance propagation procedure then consists of iterating
@@ -201,10 +195,10 @@ propagation rule that properly handles pixel values received as input (cf.
 Section 10.3.2). In particular, we apply for this layer the $z^\mathcal{B}$-rule
 given by:</p>
 
-$$
+<img src="http://latex.codecogs.com/svg.latex?
 R_i = \sum_j \frac{a_i w_{ij} - l_i w_{ij}^+ - h_i w_{ij}^-}{\sum_{i} a_i w_{ij}
 - l_i w_{ij}^+ - h_i w_{ij}^-} R_j
-$$
+">
 
 <p>In this rule, $l_i$ and $h_i$ are the lower and upper bounds of pixel values,
 i.e. "-1" and "+1", and $(\cdot)^+$ and $(\cdot)^-$ are shortcut notations for
@@ -233,11 +227,11 @@ scores can be rendered as a heatmap.</p>
     utils.heatmap(R[0].reshape(1,12,28,28).transpose(0,2,1,3).reshape(28,12*28),9,0.75)
 
 
-![png](index_files/index_18_0.png)
+![png](tutorial_files/tutorial_18_0.png)
 
 
 
-![png](index_files/index_18_1.png)
+![png](tutorial_files/tutorial_18_1.png)
 
 
 Relevant pixels are highlighted in red. Pixels that contribute negatively to the
@@ -349,12 +343,10 @@ parameters, and where we apply the increment function afterwards. As shown in
 the LRP overview paper, Step 3 can instead be computed as a gradient in the
 space of input activations:</p>
 
-<p>
-$$
+<img src="http://latex.codecogs.com/svg.latex?
 c_j = \big[\nabla~\big({\textstyle \sum_k}~z_k(\boldsymbol{a}) \cdot
 s_k\big)\big]_j
-$$
-</p>
+">
 
 <p>where $s_k$ is treated as constant.</p>
 
@@ -401,27 +393,28 @@ dimensional maps are shown for a selection of VGG-16 layers.
         utils.heatmap(numpy.array(R[l][0]).sum(axis=0),0.5*i+1.5,0.5*i+1.5)
 
 
-![png](index_files/index_35_0.png)
+![png](tutorial_files/tutorial_35_0.png)
 
 
 
-![png](index_files/index_35_1.png)
+![png](tutorial_files/tutorial_35_1.png)
 
 
 
-![png](index_files/index_35_2.png)
+![png](tutorial_files/tutorial_35_2.png)
 
 
 
-![png](index_files/index_35_3.png)
+![png](tutorial_files/tutorial_35_3.png)
 
 
 <p>We observe that the explanation becomes increasingly resolved spatially. Note
 that, like for the MNIST example, we have stopped the propagation procedure one
 layer before the pixels because the rule we have used is not applicable to pixel
-layers. Like for the MNIST case, we need ot apply the pixel-specific
-$z^\mathcal{B}$-rule for this last layer. This rule can again be implemented in
-terms of forward passes and gradient computations.</p>
+layers. Like for the MNIST case, we need ot apply the pixel-specific <img
+src="http://latex.codecogs.com/svg.latex?\text z^\mathcal{B}">-rule for this
+last layer. This rule can again be implemented in terms of forward passes and
+gradient computations.</p>
 
 
     A[0] = (A[0].data).requires_grad_(True)
@@ -443,7 +436,7 @@ channels to indicate actual pixel-wise contributions.
     utils.heatmap(numpy.array(R[0][0]).sum(axis=0),3.5,3.5)
 
 
-![png](index_files/index_39_0.png)
+![png](tutorial_files/tutorial_39_0.png)
 
 
 We observe that the heatmap highlights the outline of the castle as evidence for
