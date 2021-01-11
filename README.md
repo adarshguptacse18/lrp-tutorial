@@ -194,10 +194,9 @@ propagation rule that properly handles pixel values received as input (cf.
 Section 10.3.2). In particular, we apply for this layer the zB-rule given
 by:</p>
 
-<img src="http://latex.codecogs.com/svg.latex?
-R_i = \sum_j \frac{a_i w_{ij} - l_i w_{ij}^+ - h_i w_{ij}^-}{\sum_{i} a_i w_{ij}
-- l_i w_{ij}^+ - h_i w_{ij}^-} R_j
-">
+<img src="http://latex.codecogs.com/svg.latex?R_i = \sum_j \frac{a_i w_{ij} -
+l_i w_{ij}^+ - h_i w_{ij}^-}{\sum_{i} a_i w_{ij} - l_i w_{ij}^+ - h_i w_{ij}^-}
+R_j">
 
 <p>In this rule, <i>l<sub>i</sub></i> and <i>h<sub>i</sub></i> are the lower and
 upper bounds of pixel values, i.e. "-1" and "+1", and (·)<sup>+</sup> and
@@ -343,10 +342,8 @@ parameters, and where we apply the increment function afterwards. As shown in
 the LRP overview paper, Step 3 can instead be computed as a gradient in the
 space of input activations:</p>
 
-<img src="http://latex.codecogs.com/svg.latex?
-c_j = \big[\nabla~\big({\textstyle \sum_k}~z_k(\boldsymbol{a}) \cdot
-s_k\big)\big]_j
-">
+<img src="http://latex.codecogs.com/svg.latex?c_j = \big[\nabla~\big({\textstyle
+\sum_k}~z_k(\boldsymbol{a}) \cdot s_k\big)\big]_j">
 
 <p>where <i>s<sub>k</sub></i> is treated as constant.</p>
 
