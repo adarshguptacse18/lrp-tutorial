@@ -137,30 +137,29 @@ only the evidence for the actual class.</p>
 
     R = [None]*L + [A[L]*(T[:,None]==numpy.arange(10))]
 
-<p> The LRP-0, LRP-$\epsilon$, and LRP-$\gamma$ rules described in the <a
-href="">LRP overview paper</a> (Section 10.2.1) for propagating relevance on the
-lower layers are special cases of the more general propagation rule</p>
+<p> The LRP-0, LRP-ϵ, and LRP-γ rules described in the <a
+href="https://link.springer.com/chapter/10.1007/978-3-030-28954-6_10">LRP
+overview paper</a> (Section 10.2.1) for propagating relevance on the lower
+layers are special cases of the more general propagation rule</p>
 
 <img src="http://latex.codecogs.com/svg.latex?R_j = \sum_k \frac{a_j
 \rho(w_{jk})}{\epsilon + \sum_{0,j} a_j \rho(w_{jk})} R_k">
 
-<p>(cf. Section 10.2.2), where $\rho$ is a function that transform the weights,
-and $\epsilon$ is a small positive increment. We define below two helper
-functions that perform the weight transformation and the incrementation. In
-practice, we would like to apply different rules at different layers (cf.
-Section 10.3). Therefore, we also give the layer index "<code>l</code>" as
-argument to these functions.</p>
+<p>(cf. Section 10.2.2), where ρ is a function that transform the weights, and ϵ
+is a small positive increment. We define below two helper functions that perform
+the weight transformation and the incrementation. In practice, we would like to
+apply different rules at different layers (cf. Section 10.3). Therefore, we also
+give the layer index "<code>l</code>" as argument to these functions.</p>
 
 
     def rho(w,l):  return w + [None,0.1,0.0,0.0][l] * numpy.maximum(0,w)
     def incr(z,l): return z + [None,0.0,0.1,0.0][l] * (z**2).mean()**.5+1e-9
 
 <p>In particular, these functions and the layer they receive as a parameter let
-us reduce the general rule to LRP-0 for the top-layer, to LRP-$\epsilon$ with
-$\epsilon = 0.1\,\text{std}$ for the layer just below, and to LRP-$\gamma$ with
-$\gamma=0.1$ for the layer before. We now come to the practical implementation
-of this general rule. It can be decomposed as a sequence of four
-computations:</p>
+us reduce the general rule to LRP-0 for the top-layer, to LRP-ϵ with ϵ = 0.1std
+for the layer just below, and to LRP-γ with γ=0.1 for the layer before. We now
+come to the practical implementation of this general rule. It can be decomposed
+as a sequence of four computations:</p>
 
 <p>
 <img src="http://latex.codecogs.com/svg.latex?
@@ -192,20 +191,21 @@ layers, and at each layer, applying this sequence of computations.</p>
 <p>Note that the loop above stops one layer before reaching the pixels. To
 propagate relevance scores until the pixels, we need to apply an alternate
 propagation rule that properly handles pixel values received as input (cf.
-Section 10.3.2). In particular, we apply for this layer the $z^\mathcal{B}$-rule
-given by:</p>
+Section 10.3.2). In particular, we apply for this layer the zB-rule given
+by:</p>
 
 <img src="http://latex.codecogs.com/svg.latex?
 R_i = \sum_j \frac{a_i w_{ij} - l_i w_{ij}^+ - h_i w_{ij}^-}{\sum_{i} a_i w_{ij}
 - l_i w_{ij}^+ - h_i w_{ij}^-} R_j
 ">
 
-<p>In this rule, $l_i$ and $h_i$ are the lower and upper bounds of pixel values,
-i.e. "-1" and "+1", and $(\cdot)^+$ and $(\cdot)^-$ are shortcut notations for
-$\max(0,\cdot)$ and $\min(0,\cdot)$. The $z^\mathcal{B}$-rule can again be
-implemented with a four-step procedure similar to the one used in the layers
-above. Here, we need to create two copies of the weights, and also create arrays
-of pixel values set to $l_i$ and $h_i$ respectively:</p>
+<p>In this rule, <i>l<sub>i</sub></i> and <i>h<sub>i</sub></i> are the lower and
+upper bounds of pixel values, i.e. "-1" and "+1", and (·)<sup>+</sup> and
+(·)<sup>–</sup> are shortcut notations for max(0,·) and min(0,·). The zB-rule
+can again be implemented with a four-step procedure similar to the one used in
+the layers above. Here, we need to create two copies of the weights, and also
+create arrays of pixel values set to <i>l<sub>i</sub></i> and
+<i>h<sub>i</sub></i> respectively:</p>
 
 
     w  = W[0]
@@ -348,7 +348,7 @@ c_j = \big[\nabla~\big({\textstyle \sum_k}~z_k(\boldsymbol{a}) \cdot
 s_k\big)\big]_j
 ">
 
-<p>where $s_k$ is treated as constant.</p>
+<p>where <i>s<sub>k</sub></i> is treated as constant.</p>
 
 <p><b>Pooling layers:</b> It is suggested in Section 10.3.2 of the paper to
 treat max-pooling layers as average pooling layers in the backward pass.
@@ -411,10 +411,9 @@ dimensional maps are shown for a selection of VGG-16 layers.
 <p>We observe that the explanation becomes increasingly resolved spatially. Note
 that, like for the MNIST example, we have stopped the propagation procedure one
 layer before the pixels because the rule we have used is not applicable to pixel
-layers. Like for the MNIST case, we need ot apply the pixel-specific <img
-src="http://latex.codecogs.com/svg.latex?\text z^\mathcal{B}">-rule for this
-last layer. This rule can again be implemented in terms of forward passes and
-gradient computations.</p>
+layers. Like for the MNIST case, we need ot apply the pixel-specific zB-rule for
+this last layer. This rule can again be implemented in terms of forward passes
+and gradient computations.</p>
 
 
     A[0] = (A[0].data).requires_grad_(True)
