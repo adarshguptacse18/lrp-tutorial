@@ -21,10 +21,6 @@ S. Bach, A. Binder, G. Montavon, F. Klauschen, K.-R. Müller, W. Samek<br><a hre
 2015</font>
 </blockquote>
 
-<h3>Prerequisites</h3>
-
-<p>For this tutorial, you need to install Python, Numpy, PyTorch, Matplotlib, and OpenCV. Then, you should download <a href="tutorial.zip">tutorial.zip</a> and extract it in your working directory. It contains data, model parameters, and some additional functions (in the file <code>utils.py</code>).
-
 <h2>1 &nbsp; Numpy Implementation for a Fully-Connected Network</h2>
 
 <p>We first load 12 examplary MNIST test digits.</p>
